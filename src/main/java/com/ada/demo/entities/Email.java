@@ -1,7 +1,7 @@
 package com.ada.demo.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "EMAILS")
@@ -12,14 +12,14 @@ public class Email {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "CORREO")
+    @Column(name = "CORREO", nullable = false)
     private String correo;
 
     @Column(name = "VALIDO")
     private boolean valido;
 
     @Column(name = "FECHA")
-    private Date fecha;
+    private LocalDate fecha;
 
     public Long getId() {
         return id;
@@ -45,11 +45,11 @@ public class Email {
         this.valido = valido;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 }

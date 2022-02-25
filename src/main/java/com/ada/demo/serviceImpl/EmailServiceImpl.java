@@ -60,6 +60,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void saveEmail(boolean emailValid, Email emailNew) {
         if (emailNew != null && emailValid) {
+            emailNew.setValido(emailValid);
+            emailNew.setFecha(LocalDate.now());
             emailRepository.save(emailNew);
         }
     }

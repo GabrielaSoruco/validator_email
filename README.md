@@ -43,8 +43,6 @@ This API checks that the email has the correct characters for a new username
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `correo`      | `string` | **Required**|
-| `valido`      | `boolean` | **Required**|
-| `fecha`      | `date` | **Required**|
 
 
 
