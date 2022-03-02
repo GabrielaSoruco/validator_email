@@ -4,6 +4,9 @@ import com.ada.demo.controllers.EmailController;
 import com.ada.demo.entities.Email;
 import com.ada.demo.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,58 +22,70 @@ public class EmailControllerImpl implements EmailController {
 
     @Override
     @GetMapping("/test")
-    public String test() {
-        return "Funciona!";
+    public ResponseEntity<String> test() {
+        String msg = "Funciona!";
+        HttpHeaders header = new HttpHeaders();
+        header.add("titulo", "Validator email application");
+        return new ResponseEntity<String>(msg, header, HttpStatus.OK);
     }
 
     @Override
     @GetMapping(value = "/emailsValid")
-    public List<Email> getValidEmails() {
-        return emailService.findValidEmails();
+    public ResponseEntity<List<Email>> getValidEmails() {
+        List<Email> validEmails = emailService.findValidEmails();
+        HttpHeaders header  = new HttpHeaders();
+        header.add("titulo", "Lista de emails válidos");
+        return ResponseEntity.status(HttpStatus.OK).headers(header).body(validEmails);
     }
 
     @Override
     @GetMapping(value = "/emailsNotValid")
-    public List<Email> getInvalidEmails() {
-        return emailService.findInvalidEmails();
+    public ResponseEntity<List<Email>> getInvalidEmails() {
+        List<Email> emailsNotValid = emailService.findInvalidEmails();
+        return ResponseEntity.status(HttpStatus.OK).body(emailsNotValid);
     }
 
     @Override
     @GetMapping(value = "/emails/{id}")
-    public Optional<Email> getEmailById(@PathVariable Long id) {
-        return emailService.findEmailById(id);
+    public ResponseEntity<Optional<Email>> getEmailById(@PathVariable Long id) {
+        Optional<Email> emailById = emailService.findEmailById(id);
+        return ResponseEntity.ok(emailById);
     }
 
     @Override
     @GetMapping("/emails/validate/{email}")
-    public String validarEmail(@PathVariable String email) {
+    public ResponseEntity<String> validarEmail(@PathVariable("email") String email) {
         contador++;
         if(emailService.validarEmail(email)){
             emailValid = true;
-            return "Es válido";
+            String msg = "Es válido";
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(msg);
         } else {
             emailValid = false;
-            return "No es válido el mail ingresado";
+            String msg = "No es válido el mail ingresado";
+            return ResponseEntity.status(HttpStatus.OK).body(msg);
         }
     }
 
+
     @GetMapping("/emails/validate/intentos")
-    public String getIntentos(){
+    public ResponseEntity<String> getIntentos(){
         int auxContador = contador;
+        String msg = emailService.contadorRegistros(emailValid, auxContador);
         if(emailValid){
             contador = 0;
         }
-        return emailService.contadorRegistros(emailValid, auxContador);
+        return ResponseEntity.ok(msg);
     }
 
     @Override
     @PostMapping(value = "/emails/validate/add")
-    public String addEmail(@RequestBody Email email) {
+    public ResponseEntity<Email> addEmail(@RequestBody Email email) {
         if(emailValid){
-            emailService.saveEmail(emailValid, email);
-            return "Guardado satisfactoriamente";
-        } else {
-            return "Debe comprobar un email válido o el email es nulo";
-        }
+            Email newEmail = emailService.saveEmail(emailValid, email);
+            HttpHeaders header = new HttpHeaders();
+            header.add("description", "adding new email");
+            return ResponseEntity.status(HttpStatus.CREATED).headers(header).body(newEmail);
+        } return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Email());
     }
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface EmailService {
 
     Optional<Email> findEmailById(Long id);
-    void saveEmail(boolean emilValid, Email emailNew);
+    Email saveEmail(boolean emilValid, Email emailNew);
     boolean validarEmail(String email);
     List<Email> findValidEmails();
     List<Email> findInvalidEmails();
