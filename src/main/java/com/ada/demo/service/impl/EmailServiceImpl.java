@@ -1,4 +1,4 @@
-package com.ada.demo.serviceImpl;
+package com.ada.demo.service.impl;
 
 import com.ada.demo.entities.Email;
 import com.ada.demo.repository.EmailRepository;

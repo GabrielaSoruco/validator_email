@@ -1,4 +1,4 @@
-package com.ada.demo.controllersImpl;
+package com.ada.demo.controllers.impl;
 
 import com.ada.demo.controllers.EmailController;
 import com.ada.demo.entities.Email;
